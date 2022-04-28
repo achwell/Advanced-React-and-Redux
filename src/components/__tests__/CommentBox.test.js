@@ -1,26 +1,43 @@
-import { useState } from "react";
+import React from 'react';
+import {mount} from 'enzyme';
+import Root from 'Root'
+import CommentBox from 'components/CommentBox';
 
-function CommentBox() {
-    const [comment, setComment] = useState("")
+let wrapped;
 
-    const handleChange = (e) => {
-        setComment(e.currentTarget.value);
-    }
+beforeEach(() => {
+    wrapped = mount(<Root><CommentBox/></Root>);
+});
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setComment("");
-    }
+afterEach(() => {
+    wrapped.unmount();
+});
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <h4>Add a comment</h4>
-            <textarea value={comment} onChange={handleChange}/>
-            <div>
-                <button>Submit Comment</button>
-            </div>
-        </form>
-    );
-}
+it('has a text area and two buttons', () => {
+    expect(wrapped.find('textarea').length).toEqual(1);
+    expect(wrapped.find('button').length).toEqual(2);
+});
 
-export default CommentBox;
+describe('the text area', () => {
+
+    const value = 'New Comment';
+
+    beforeEach(() => {
+        wrapped.find('textarea').simulate('change', {
+            target: {value: value}
+        });
+
+        wrapped.update();
+    });
+
+    it('has a text area that users can type in to', () => {
+        expect(wrapped.find('textarea').prop('value')).toEqual(value);
+    });
+
+    it('clears the textarea when form is submitted', () => {
+        expect(wrapped.find('textarea').prop('value')).toEqual(value);
+        wrapped.find('form').simulate('submit');
+        wrapped.update();
+        expect(wrapped.find('textarea').prop('value')).toEqual('');
+    });
+})
