@@ -2,11 +2,15 @@ import React from 'react';
 import {reduxForm, Field} from 'redux-form';
 import {compose} from 'redux';
 import {connect} from 'react-redux';
+import {useNavigate} from "react-router-dom";
 import * as actions from '../../actions';
 
-const Signin = ({errorMessage, handleSubmit, history, signin}) => {
+const Signin = ({errorMessage, handleSubmit, signin}) => {
+
+    const navigate = useNavigate();
+
     const onSubmit = formProps => {
-        signin(formProps, () => history.push('/feature'));
+        signin(formProps, () => navigate('/feature'));
     };
 
     return (

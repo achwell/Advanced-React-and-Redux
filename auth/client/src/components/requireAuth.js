@@ -1,13 +1,15 @@
 import React, {useEffect} from "react"
 import {connect} from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const RequireAuth = (ChildComponent) => {
 
     const ComposedComponent = (props) => {
 
+        const navigate = useNavigate();
+
         useEffect(() => {
             shouldNavigateAway();
-            // eslint-disable-next-line react-hooks/exhaustive-deps
         }, []);
 
         useEffect(() => {
@@ -16,7 +18,7 @@ const RequireAuth = (ChildComponent) => {
 
         const shouldNavigateAway = () => {
             if (!props.auth) {
-                props.history.push("/");
+                navigate.push("/");
             }
         }
 
